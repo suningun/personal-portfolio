@@ -6,6 +6,8 @@ type ExperienceItem = (typeof portfolio.experience)[number] & { type: "experienc
 type EducationItem = (typeof portfolio.education)[number] & { type: "education" };
 type TimelineItem = ExperienceItem | EducationItem;
 
+const isExperienceItem = (item: TimelineItem): item is ExperienceItem => item.type === "experience";
+
 export default function Experiencee() {
   const items: TimelineItem[] = [
     ...(portfolio.experience ?? []).map((e) => ({ ...e, type: "experience" as const })),
@@ -32,6 +34,9 @@ export default function Experiencee() {
               const left = idx % 2 === 0;
               const isEdu = e.type === "education";
               const Icon = isEdu ? GraduationCap : Briefcase;
+
+              const description = isExperienceItem(e) ? e.description : undefined;
+              const bulletItems = isEdu ? e.details : isExperienceItem(e) ? e.bullets : undefined;
 
               return (
                 <div
@@ -108,23 +113,26 @@ export default function Experiencee() {
                           </span>
                         </div>
     
-                      </div>
+            </div>
+            
+            {/* Description as normal text (no bullets) */}
+            {description?.length ? (
+              <p className="mt-4 text-[var(--muted)]">{description[0]}</p>
+            ) : null}
 
-                      {(() => {
-                        const list = isEdu ? e.details : e.bullets;
-                        return list?.length ? (
-                          <ul className="mt-5 space-y-2 text-[var(--muted)]">
-                            {list.map((t) => (
-                              <li key={t} className="flex gap-3">
-                                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[var(--primary)]/80" />
-                                <span>{t}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : null;
-                      })()}
-                    </div>
-                  </div>
+            {/* Bullets only for details / bullets */}
+            {bulletItems?.length ? (
+              <ul className="text-sm mt-5 space-y-2 text-[var(--muted)]">
+                {bulletItems.map((t) => (
+                  <li key={t} className="flex gap-3">
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[var(--primary)]/80" />
+                    <span>{t}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        </div>
 
                   {/* right placeholder */}
                   <div className={left ? "md:col-start-2 md:opacity-0 md:pointer-events-none" : ""} />

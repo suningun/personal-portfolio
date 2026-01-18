@@ -18,6 +18,7 @@ export type Experience = {
   start: string;
   end: string;
   bullets: string[];
+  description: string[];
   tech?: string[];
 };
 
@@ -88,7 +89,7 @@ export const portfolio: PortfolioData = {
       linkedin: "https://www.linkedin.com/in/suning-un-85a439344/"
     },
     phone: "+855 70 833 235",
-    img: "/images/pic.jpg",
+    img: "/images/profile.jpg",
   },
 
   skills: {
@@ -127,7 +128,7 @@ export const portfolio: PortfolioData = {
           { label: "Git", value: 33 },
           { label: "Vercel", value: 55 },
           { label: "Framer", value: 82 },
-          { label: "Figman", value: 86 },
+          { label: "Figma", value: 86 },
         ],
       },
     ],
@@ -142,8 +143,9 @@ export const portfolio: PortfolioData = {
       location: "Remote",
       start: "2025",
       end: "Present",
+      description:["Teaching students at Takeo Province"],
       bullets: [
-        "Establish Sisters of Code Club in Takeo Province (High School)",
+        "Establish Sisters of Code Club",
         "Taught computer literacy, online safety, and digital identity protection",
         "Provided hands-on coding instruction using Code.org, Scratch, WIX, HTML & CSS",
         "Introduced students to AI fundamentals & emerging technologies.",
@@ -160,8 +162,7 @@ export const portfolio: PortfolioData = {
       degree: "Bachelor of Science in Software Development",
       start: "2024",
       end: "2029",
-      location:"",
-      details: ["Pursued with honors"],
+      location:"Cambodia",
     },
   ],
 
