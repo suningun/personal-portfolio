@@ -68,10 +68,10 @@ export default function Hero() {
           </p>
 
           <div className="flex justify-center md:justify-start gap-4 pt-4">
-            <a className="px-6 py-3 rounded-full btn-gradient text-white font-medium">
+            <a href="#projects" className="px-6 py-3 rounded-full btn-gradient text-white font-medium">
               View Projects
             </a>
-            <a className="px-6 py-3 rounded-full secondary-btn-gradient font-medium">
+            <a href="#contact" className="px-6 py-3 rounded-full secondary-btn-gradient font-medium">
               Contact
             </a>
           </div>
