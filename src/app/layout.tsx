@@ -1,6 +1,7 @@
 // src/app/layout.tsx
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
+import Image from "next/image";
 import Script from "next/script";
 // @ts-ignore: allow side-effect css import without type declarations
 import "./globals.css";
@@ -13,6 +14,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <title>Suning Un, Software Developer</title>
+        <link rel="icon" type="image/x-icon" href="/images/favicon.ico"></link>
+        <link rel="icon" type="image/x-icon" href="/images/favicon.ico"></link>
         <meta
   name="format-detection"
   content="telephone=no, date=no, email=no, address=no"
