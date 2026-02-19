@@ -32,7 +32,7 @@ export default function Hero() {
             Hi!, I’m {portfolio.personal.name}.
           </h1>
 
-            <div className="flex flex-wrap gap-2 mt-4">
+            <div className="text-center md:text-left space-y-6">
                   
                     <h1
                       className="
@@ -78,6 +78,7 @@ export default function Hero() {
         </div>
 
       </div>
+      
     </section>
   );
 }

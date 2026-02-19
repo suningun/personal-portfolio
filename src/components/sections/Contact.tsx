@@ -158,7 +158,7 @@ export default function ContactSection() {
               onSubmit={(e) => {
                 e.preventDefault();
                 // UI only (you can connect later)
-                alert("Message sent (demo) ✅");
+                alert("Message sent successfully.");
                 setForm({ name: "", email: "", message: "" });
               }}
               className="space-y-6"

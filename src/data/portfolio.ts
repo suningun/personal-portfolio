@@ -89,7 +89,7 @@ export const portfolio: PortfolioData = {
       linkedin: "https://www.linkedin.com/in/suning-un-85a439344/"
     },
     phone: "+855 70 833 235",
-    img: "/images/profile.jpg",
+    img: "/images/ing.webp",
   },
 
   skills: {
@@ -99,7 +99,7 @@ export const portfolio: PortfolioData = {
         icon: "Code2",
         items: [
           { label: "Python & JAVA", value: 50 },
-          { label: "HTML & CSS", value:60 },
+          { label: "HTML & CSS", value: 80 },
           { label: "JavaScript", value: 20 },
           { label: "C++", value: 10 },
         ],
@@ -111,7 +111,7 @@ export const portfolio: PortfolioData = {
           { label: "Bootstrap", value: 60 },
           { label: "Tailwind CSS", value: 55 },
           { label: "React", value: 20 },
-          { label: "Django", value: 10 },
+          { label: "Django", value: 5 },
         ],
       },
       {
@@ -171,7 +171,7 @@ export const portfolio: PortfolioData = {
       name: "Personal Portfolio",
       description: "My personal website built with Next.js and Tailwind.",
       tech: ["Next.js", "Tailwind"],
-      link: "https://vibrant-illuminate-985343.framer.app/",
+      link: "https://suningun.vercel.app/",
       img: "/images/portfolio-ing.png",
     },
         {
