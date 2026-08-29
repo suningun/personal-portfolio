@@ -13,61 +13,36 @@ export default function About() {
           <div className="space-y-4 grid gap-4">
             <div className="max-w-3xl space-y-4">
             <p className="text-[var(--text)] text-lg font-medium">
-              I’m {portfolio.personal.name}, a {portfolio.personal.role}
+              I'm {portfolio.personal.name}, a Software Development student.
             </p>
 
             <p className="text-[var(--muted)] leading-relaxed">
-              I enjoy building clean, fast, and user-focused web applications.
-              I care deeply about design details, performance, and writing
-              maintainable code that actually scales.
+              I enjoy developing web applications and learning how software is designed from frontend interfaces to backend systems. Through coursework and personal projects, I've been building my technical skills while gaining hands-on experience with modern development tools.
             </p>
 
             <p className="text-[var(--muted)] leading-relaxed">
-              Currently based in {portfolio.personal.location}, I’m focused on
-              improving my skills in modern frontend technologies while
-              exploring backend systems and real-world product development.
+              Currently based in {portfolio.personal.location}, I'm seeking a Full Stack Developer or Software Developer internship where I can apply what I've learned, gain real-world experience, and continue growing as a developer alongside an experienced team.
             </p>
             </div>
-            {/* 👉 STATS (NEW — inserted here) */}
-          <div className="grid gap-4 sm:grid-cols-3">
-            <StatCard
-              icon={<Code2 />}
-              value="1+"
-              title="Years"
-              subtitle="Coding Experience"
-            />
-            <StatCard
-              icon={<Sparkles />}
-              value="2+"
-              title="Projects"
-              subtitle="Completed"
-            />
-            <StatCard
-              icon={<Zap />}
-              value="Fast"
-              title="Learner"
-              subtitle="Always Adapting"
-            />
-          </div>
           </div>
 
           {/* EXISTING mindset / value / focus / goal cards */}
           <div className="grid gap-4 sm:grid-cols-2">
             <AboutCard
-              title="Focus"
-              text="Frontend engineering, UI design, and performance-driven development."
+              title="Interests"
+              text="Full Stack Development and building useful web applications."
             />
             <AboutCard
-              title="Mindset"
-              text="Always learning, experimenting, and improving through practice."
+              title="Approach"
+              text="Learning through projects and writing clean, maintainable code."
             />
             <AboutCard
-              title="Values"
-              text="Clean code, clarity, consistency, and attention to detail."
+              title="Strengths"
+              text="Problem-solving, adaptability, and attention to detail."
             />
             <AboutCard
               title="Goal"
-              text="Build meaningful products and grow into a strong full-stack developer."
+              text="Gain industry experience and grow as a software developer."
             />
           </div>
 

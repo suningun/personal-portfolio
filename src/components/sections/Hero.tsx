@@ -7,7 +7,7 @@ export default function Hero() {
       id="home"
       className="min-h-screen flex items-center justify-center px-6"
     >
-      <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-[auto_1fr] items-center gap-12">
+      <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-[auto_1fr] items-center gap-16">
 
         {/* Image */}
         <div className="flex justify-center md:justify-start rounded-xl p-5

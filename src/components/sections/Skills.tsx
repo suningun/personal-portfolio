@@ -10,5 +10,5 @@ export default function Skills() {
         </Section>
     </section>
 
-  );
+    );
 }
