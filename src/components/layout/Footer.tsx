@@ -1,130 +1,85 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { portfolio } from "@/data/portfolio";
-import { useEffect, useState } from "react";
-
-const linksLeft = [
-  { label: "Home", href: "#home" },
-  { label: "Projects", href: "#projects" },
-  { label: "Experience", href: "#experience" },
-];
-
-const linksRight = [
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Contact", href: "#contact" },
-];
 
 export default function Footer() {
   const year = new Date().getFullYear();
-  const [showBackToTop, setShowBackToTop] = useState(false);
 
-  useEffect(() => {
-    const updateVisibility = () => setShowBackToTop(window.scrollY > 600);
-    updateVisibility();
-    window.addEventListener("scroll", updateVisibility, { passive: true });
-    return () => window.removeEventListener("scroll", updateVisibility);
-  }, []);
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
-    <footer className="relative mt-20 border-t border-border">
-      {/* top section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
-        <div className="grid gap-10 md:grid-cols-3">
-          {/* Brand / summary */}
-          <div className="space-y-4">
-            <div className="font-semibold text-2xl tracking-wide">
-              <span className="text-primary">SUNING UN</span>
-            </div>
-
-            <p className="text-base md:text-lg leading-relaxed text-muted max-w-sm">
-              {portfolio.personal.summary ??
-                "Crafting beautiful, functional, and scalable web applications with passion and precision."}
-            </p>
+    <footer className="border-t">
+      <div className="max-w-6xl mx-auto px-6 pt-14 pb-6 grid md:grid-cols-[1.5fr_1fr_1fr] gap-10">
+        {/* Brand / summary */}
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-2">
+            <Image
+              src="/images/avatar.svg"
+              alt="Suning Un"
+              width={34}
+              height={34}
+              className="rounded-full"
+              style={{ imageRendering: "pixelated" }}
+            />
+            <span className="font-mono text-sm">
+              <span className="text-green">❯</span> suning
+            </span>
           </div>
-
-          {/* Quick links */}
-          <div className="md:justify-self-center">
-            <h4 className="text-xl font-semibold text-text">
-              Quick Links
-            </h4>
-
-            <div className="mt-4 grid grid-cols-2 gap-x-12 gap-y-3 text-muted">
-              {linksLeft.map((l) => (
-                <a
-                  key={l.href}
-                  href={l.href}
-                  className="hover:text-text transition"
-                >
-                  {l.label}
-                </a>
-              ))}
-              {linksRight.map((l) => (
-                <a
-                  key={l.href}
-                  href={l.href}
-                  className="hover:text-text transition"
-                >
-                  {l.label}
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* Contact */}
-          <div className="md:justify-self-end">
-            <h4 className="text-xl font-semibold text-text">
-              Get in Touch
-            </h4>
-
-            <div className="mt-4 space-y-3 text-muted">
-              {portfolio.personal.email && (
-                <a
-                  className="block hover:text-text transition break-all"
-                  href={`mailto:${portfolio.personal.email}`}
-                >
-                  {portfolio.personal.email}
-                </a>
-              )}
-
-              {portfolio.personal.location && (
-                <p className="block">{portfolio.personal.location}</p>
-              )}
-
-              {portfolio.personal.phone && (
-                <a
-                  className="block hover:text-text transition"
-                  href={`tel:${portfolio.personal.phone}`}
-                >
-                  {portfolio.personal.phone}
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* bottom bar */}
-      <div className="border-t border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row gap-4 items-center justify-between text-muted text-sm font-mono">
-          <p>
-            © {year} {portfolio.personal.name}
+          <p className="text-sm text-muted">
+            Software Development student building web apps from the interface to the database.
           </p>
-
-          <div className="flex items-center gap-6">
-            <p>Built with Next.js &amp; Tailwind CSS</p>
+          <p className="font-mono text-xs text-green">● open to internships</p>
+        </div>
+        {/* Navigation links */}
+        <div>
+          <p className="font-mono text-xs text-muted mb-2">navigate</p>
+          <div className="grid grid-cols-2 gap-y-2 text-sm text-muted">
+            <Link href="#home" className="hover:text-text transition">Home</Link>
+            <Link href="#about" className="hover:text-text transition">About</Link>
+            <Link href="#skills" className="hover:text-text transition">Skills</Link>
+            <Link href="#projects" className="hover:text-text transition">Projects</Link>
+            <Link href="#experience" className="hover:text-text transition">Experience</Link>
+            <Link href="#more" className="hover:text-text transition">More</Link>
+            <Link href="#contact" className="hover:text-text transition">Contact</Link>
+          </div>
+        </div>
+        {/* Social / elsewhere */}
+        <div>
+          <p className="font-mono text-xs text-muted mb-2">elsewhere</p>
+          <div className="flex flex-col gap-2 text-sm text-muted">
+            {portfolio.personal.socials?.github && (
+              <Link href={portfolio.personal.socials.github} target="_blank" rel="noreferrer" className="hover:text-primary transition">
+                GitHub ↗
+              </Link>
+            )}
+            {portfolio.personal.socials?.linkedin && (
+              <Link href={portfolio.personal.socials.linkedin} target="_blank" rel="noreferrer" className="hover:text-primary transition">
+                LinkedIn ↗
+              </Link>
+            )}
+            {portfolio.personal.email && (
+              <Link href={`mailto:${portfolio.personal.email}`} className="hover:text-primary transition">
+                Email ↗
+              </Link>
+            )}
           </div>
         </div>
       </div>
-
-      {/* back to top */}
-      <a
-        href="#home"
-        className={`fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full inline-flex items-center justify-center bg-primary text-on-primary hover:scale-105 active:scale-95 transition-opacity ${showBackToTop ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
-        aria-label="Back to top"
-      >
-        <span className="text-2xl leading-none">↑</span>
-      </a>
+      {/* Bottom bar */}
+      <div className="border-t font-mono text-xs text-muted flex justify-between items-center max-w-6xl mx-auto px-6 py-4">
+        <p>© {year} Suning Un · built with Next.js</p>
+        <button
+          onClick={scrollToTop}
+          className="flex items-center gap-1 text-green hover:text-primary transition"
+        >
+          <span className="font-mono">❯ cd ~</span>
+          <span className="text-xl leading-none">↑</span>
+        </button>
+      </div>
     </footer>
   );
 }
