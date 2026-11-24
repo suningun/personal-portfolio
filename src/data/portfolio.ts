@@ -30,17 +30,6 @@ export type Education = {
   details?: string[];
 };
 
-export type Project = {
-  name: string;
-  description: string;
-  tech: string[];
-  role?: string;
-  highlights?: string[];
-  award?: string;
-  link?: string;
-  github?: string;
-  img: string;
-};
 export type Skill = {
   name: string;
   snippet: string;
@@ -96,7 +85,6 @@ export type PortfolioData = {
   experience: Experience[];
   education: Education[];
   languages?: Language[];
-  projects: Project[];
   achievements: string[];
 
   additionalInfo: {
@@ -247,25 +235,6 @@ export const portfolio: PortfolioData = {
       level: "Intermediate",
       proficiency: 55,
       color: "green",
-    },
-  ],
-
-  projects: [
-    {
-      name: "Personal Portfolio",
-      description: "My personal website built with Next.js and Tailwind.",
-      tech: ["Next.js", "Tailwind"],
-      github: "https://github.com/suningun/personal-portfolio",
-      link: "https://suningun.vercel.app/",
-      img: "/images/portfolio-ing.png",
-    },
-        {
-      name: "Dermis AI Disease Detector",
-      description: "AI built with Teachable Machine & Implemented using Framer.",
-      tech: ["Teachable Machine", "Framer"],
-      award: "Techo Sen Award — 3rd of 11 teams, AI For Education Competition 2025",
-      link: "https://vibrant-illuminate-985343.framer.app/",
-      img: "/images/dermis.png",
     },
   ],
 
