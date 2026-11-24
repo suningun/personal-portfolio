@@ -1,17 +1,20 @@
 import { portfolio } from "@/data/portfolio";
 import Reveal from "@/components/ui/Reveal";
 import HeroOrbit from "./HeroOrbit";
+import Button from "@/components/ui/Button";
 
 export default function Hero() {
   return (
     <section
       id="home"
-      className="py-20 md:py-28 flex items-center max-w-6xl mx-auto px-6 bg-bg relative z-0"
+      className="scroll-mt-20 mx-auto max-w-6xl px-6 py-24 md:py-28 flex items-center bg-bg relative z-0"
     >
       <Reveal>
         <div className="grid items-center gap-12 md:grid-cols-[1.1fr_1fr] w-full">
         <div className="text-center md:text-left">
-          <p className="font-mono text-sm text-green mb-4">❯ whoami</p>
+          <p className="font-mono text-sm text-muted mb-4">
+            <span className="text-green">❯</span> whoami
+          </p>
           <h1 className="text-5xl md:text-6xl font-semibold tracking-tight text-text">
             Hi, I&apos;m {portfolio.personal.name}.
           </h1>
@@ -26,22 +29,16 @@ export default function Hero() {
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center md:justify-start items-center gap-3">
-            <a
-              href="#projects"
-              className="font-mono rounded-full h-12 px-6 inline-flex items-center bg-primary text-on-primary"
-            >
+            <Button variant="primary" href="#projects" className="inline-flex items-center">
               View projects
-            </a>
-            <a
-              href="#contact"
-              className="font-mono rounded-full h-12 px-6 inline-flex items-center border border-border text-text hover:border-primary"
-            >
+            </Button>
+            <Button variant="outline" href="#contact" className="inline-flex items-center">
               Contact
-            </a>
+            </Button>
             <a
               href="/cv.pdf"
               download
-              className="font-mono text-lavender hover:text-primary px-2"
+              className="font-mono text-sm text-lavender hover:text-primary"
             >
               Download CV ↓
             </a>

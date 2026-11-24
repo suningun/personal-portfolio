@@ -1,152 +1,290 @@
- "use client";
+"use client";
 
 import { Briefcase, GraduationCap } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { portfolio } from "@/data/portfolio";
+import Card from "@/components/ui/Card";
+import Chip from "@/components/ui/Chip";
 import Section from "@/components/ui/Section";
-import { useEffect, useRef, useState } from "react";
 
-type ExperienceItem = (typeof portfolio.experience)[number] & { type: "experience" };
-type EducationItem = (typeof portfolio.education)[number] & { type: "education" };
-type TimelineItem = ExperienceItem | EducationItem;
+type TimelineEntry = {
+  id: string;
+  kind: "job" | "education";
+  sortDate: number;
+  title: string;
+  subtitle?: string;
+  summary?: string;
+  date: string;
+  location?: string;
+  bullets?: string[];
+  tech?: string[];
+};
 
-const isExperienceItem = (item: TimelineItem): item is ExperienceItem => item.type === "experience";
+const monthValue: Record<string, number> = {
+  jan: 1,
+  feb: 2,
+  mar: 3,
+  apr: 4,
+  may: 5,
+  jun: 6,
+  jul: 7,
+  aug: 8,
+  sep: 9,
+  oct: 10,
+  nov: 11,
+  dec: 12,
+};
 
-export default function Experiencee() {
+function parseDate(value: string) {
+  const year = Number(value.match(/\d{4}/)?.[0] ?? 0);
+  const month = Object.entries(monthValue).find(([name]) =>
+    value.toLowerCase().includes(name),
+  )?.[1] ?? 1;
+  return year * 100 + month;
+}
+
+export default function ExperienceEducation() {
   const timelineRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  const items: TimelineItem[] = [
-    ...(portfolio.experience ?? []).map((e) => ({ ...e, type: "experience" as const })),
-    ...(portfolio.education ?? []).map((e) => ({ ...e, type: "education" as const })),
-  ];
+  const fillRef = useRef<HTMLDivElement>(null);
+  const entryRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const activeIdRef = useRef<string | null>(null);
+  const frameRef = useRef<number | undefined>(undefined);
+  const reducedMotionRef = useRef(false);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+
+  const entries = useMemo<TimelineEntry[]>(() => {
+    const jobs: TimelineEntry[] = portfolio.experience.map((item, index) => ({
+      id: `job-${index}`,
+      kind: "job",
+      sortDate: parseDate(item.end === "Present" ? "9999" : item.end),
+      title: item.title,
+      subtitle: item.company,
+      summary: item.summary,
+      date: `${item.start} — ${item.end}`,
+      location: item.location,
+      bullets: item.bullets,
+      tech: item.tech,
+    }));
+    const education: TimelineEntry[] = portfolio.education.map((item, index) => ({
+      id: `education-${index}`,
+      kind: "education",
+      sortDate: parseDate(item.end),
+      title: item.degree,
+      subtitle: item.school,
+      summary: item.summary,
+      date: `${item.start} — ${item.end}`,
+      location: item.location,
+      bullets: item.details,
+    }));
+
+    return [...jobs, ...education].sort(
+      (a, b) => b.sortDate - a.sortDate,
+    );
+  }, []);
 
   useEffect(() => {
-    const element = timelineRef.current;
-    if (!element) return;
+    const timeline = timelineRef.current;
+    const fill = fillRef.current;
+    if (!timeline || !fill) return;
 
+    reducedMotionRef.current = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    const updateScrollLinkedState = () => {
+      frameRef.current = undefined;
+      const rect = timeline.getBoundingClientRect();
+      const denominator = Math.max(rect.height - window.innerHeight, 1);
+      const progress = reducedMotionRef.current
+        ? 1
+        : Math.min(1, Math.max(0, -rect.top / denominator));
+      fill.style.transform = `scaleY(${progress})`;
+
+      if (reducedMotionRef.current) return;
+
+      let closestId: string | null = null;
+      let closestDistance = Number.POSITIVE_INFINITY;
+      const viewportCenter = window.innerHeight / 2;
+      for (const entry of entries) {
+        const element = entryRefs.current[entry.id];
+        if (!element) continue;
+        const distance = Math.abs(
+          element.getBoundingClientRect().top +
+            element.getBoundingClientRect().height / 2 -
+            viewportCenter,
+        );
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestId = entry.id;
+        }
+      }
+
+      if (closestId === activeIdRef.current) return;
+      if (activeIdRef.current) {
+        const previous = entryRefs.current[activeIdRef.current];
+        previous?.querySelector("[data-card]")?.classList.remove("border-primary/50");
+        previous?.querySelector("[data-dot]")?.classList.remove(
+          "bg-primary",
+          "animate-pulse",
+          "shadow-[0_0_0_6px_color-mix(in_srgb,var(--primary)_18%,transparent)]",
+        );
+        previous?.querySelector("[data-date]")?.classList.remove("text-primary");
+      }
+      activeIdRef.current = closestId;
+      if (closestId) {
+        const current = entryRefs.current[closestId];
+        current?.querySelector("[data-card]")?.classList.add("border-primary/50");
+        current?.querySelector("[data-dot]")?.classList.add(
+          "bg-primary",
+          "animate-pulse",
+          "shadow-[0_0_0_6px_color-mix(in_srgb,var(--primary)_18%,transparent)]",
+        );
+        current?.querySelector("[data-date]")?.classList.add("text-primary");
+      }
+    };
+
+    const requestUpdate = () => {
+      if (frameRef.current === undefined) {
+        frameRef.current = window.requestAnimationFrame(updateScrollLinkedState);
+      }
+    };
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setVisible(true);
-        observer.disconnect();
+      (observations) => {
+        if (reducedMotionRef.current) return;
+        for (const observation of observations) {
+          observation.target.classList.toggle(
+            "is-visible",
+            observation.isIntersecting,
+          );
+        }
       },
       { threshold: 0.15 },
     );
 
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
+    Object.values(entryRefs.current).forEach((entry) => {
+      if (entry) observer.observe(entry);
+    });
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    requestUpdate();
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", requestUpdate);
+      if (frameRef.current !== undefined) {
+        window.cancelAnimationFrame(frameRef.current);
+      }
+    };
+  }, [entries]);
 
   return (
-    <section id="experience">
-      <Section title="Experiences & Education" eyebrow="~/experience">
-        <div
-          ref={timelineRef}
-          className={`relative transition-opacity duration-700 ${
-            visible
-              ? "opacity-100"
-              : "opacity-0 motion-reduce:opacity-100"
-          }`}
-        >
-          {/* center line */}
+    <section id="experience" className="scroll-mt-20">
+      <Section title="Experiences & Education" command="git log --oneline">
+        <div ref={timelineRef} className="relative">
+          <div className="pointer-events-none absolute bottom-0 left-1.5 top-0 z-0 w-0.5 bg-border md:left-1/2 md:-translate-x-1/2" />
           <div
-            className={`pointer-events-none absolute left-1.5 top-0 h-full w-0.5 origin-top bg-primary -z-10 transition-transform duration-[1600ms] ease-out md:left-1/2 md:-translate-x-1/2 ${
-              visible ? "scale-y-100" : "scale-y-0 motion-reduce:scale-y-100"
-            }`}
+            ref={fillRef}
+            className="pointer-events-none absolute bottom-0 left-1.5 top-0 z-0 w-0.5 origin-top bg-primary md:left-1/2 md:-translate-x-1/2"
           />
 
-          <div className="space-y-10">
-            {items.map((e, idx) => {
-              const left = idx % 2 === 0;
-              const isEdu = e.type === "education";
-              const Icon = isEdu ? GraduationCap : Briefcase;
-
-              const description = isExperienceItem(e) ? e.description : undefined;
-              const bulletItems = isEdu ? e.details : isExperienceItem(e) ? e.bullets : undefined;
+          <div className="space-y-8">
+            {entries.map((entry, index) => {
+              const isEducation = entry.kind === "education";
+              const Icon = isEducation ? GraduationCap : Briefcase;
+              const left = index % 2 === 0;
 
               return (
                 <div
-                  key={`${e.type}-${isEdu ? e.school : e.company}-${e.start}-${e.end}`}
-                  className={`relative grid grid-cols-1 pl-6 md:grid-cols-2 md:gap-10 md:pl-0 transition-all duration-700 ease-out ${
-                    visible
-                      ? "translate-x-0 opacity-100"
-                      : "translate-x-[-1rem] opacity-0 motion-reduce:translate-x-0 motion-reduce:opacity-100"
-                  }`}
-                  style={{ transitionDelay: `${idx * 450}ms` }}
+                  key={entry.id}
+                  ref={(element) => {
+                    entryRefs.current[entry.id] = element;
+                  }}
+                  className="timeline-entry group relative grid translate-x-[-12px] grid-cols-1 pl-6 opacity-30 transition-[opacity,transform] duration-500 ease-out motion-reduce:translate-x-0 motion-reduce:opacity-100 md:grid-cols-2 md:gap-10 md:pl-0 [&.is-visible]:translate-x-0 [&.is-visible]:opacity-100"
                 >
-                  {/* dot */}
-                  <div
-                    className={`absolute left-0 top-10 h-3 w-3 rounded-full border-2 bg-bg md:left-1/2 md:-translate-x-1/2 ${
-                      idx % 3 === 0
-                        ? "border-primary"
-                        : idx % 3 === 1
-                          ? "border-lavender"
-                          : "border-green"
-                    }`}
+                  <button
+                    type="button"
+                    aria-label={`Center ${entry.title} on timeline`}
+                    onClick={() =>
+                      entryRefs.current[entry.id]?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                      })
+                    }
+                    className="absolute left-0 top-10 z-20 h-3 w-3 rounded-full border-2 border-border bg-bg transition-colors md:left-1/2 md:-translate-x-1/2"
+                    data-dot
                   />
 
-                  {/* left column */}
-                  <div className={left ? "md:pr-8" : "md:pr-8 md:opacity-0 md:pointer-events-none"} />
-
-                  {/* card */}
                   <div
                     className={
                       left
-                        ? "md:col-start-1 md:row-start-1 md:justify-self-end md:pr-8"
-                        : "md:col-start-2 md:pl-8"
+                        ? "md:col-start-1 md:row-start-1 md:pr-8"
+                        : "md:col-start-2 md:row-start-1 md:pl-8"
                     }
                   >
-                    <div
-                      className="w-full max-w-xl rounded-xl p-6 bg-surface border border-border hover:-translate-y-1 transition-all duration-300"
+                    <Card
+                      data-card
+                      className="w-full transition-transform duration-300 group-hover:-translate-y-0.5 group-focus-within:-translate-y-0.5"
                     >
-                      <div className="flex items-start gap-4">
-                        <div
-                          className="p-3 rounded-xl bg-primary text-on-primary"
-                        >
-                          <Icon className="w-5 h-5" />
-                        </div>
-
-                        <div className="flex-1">
-                          <h3 className="text-xl font-semibold text-text">
-                            {isEdu ? e.degree : e.title}
-                          </h3>
-
-                          <p className="text-base md:text-lg leading-relaxed text-muted">{isEdu ? e.school : e.company}</p>
-
-                                  {e.location && (
-                          <p className="inline-flex mt-3 px-3 py-1 rounded-full text-xs bg-bg border border-border text-muted font-mono">
-                                      {e.location}
-                                    </p>
-                                  )}
-                          <span
-                            className="inline-flex mt-3 px-3 py-1 rounded-full text-xs bg-bg border border-border text-muted font-mono"
-                          >
-                            {e.start} — {e.end}
+                      <button
+                        type="button"
+                        aria-expanded={Boolean(expanded[entry.id])}
+                        onClick={() =>
+                          setExpanded((current) => ({
+                            ...current,
+                            [entry.id]: !current[entry.id],
+                          }))
+                        }
+                        className="w-full text-left"
+                      >
+                        <span className="flex items-start gap-4">
+                          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary text-on-primary">
+                            <Icon className="h-5 w-5" />
                           </span>
-                        </div>
-    
-            </div>
-            
-            {/* Description as normal text (no bullets) */}
-            {description?.length ? (
-              <p className="mt-4 text-base md:text-lg leading-relaxed text-muted">{description[0]}</p>
-            ) : null}
-
-            {/* Bullets only for details / bullets */}
-            {bulletItems?.length ? (
-              <ul className="text-base md:text-lg leading-relaxed mt-5 space-y-2 text-muted">
-                {bulletItems.map((t) => (
-                  <li key={t} className="flex gap-3">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-green" />
-                    <span>{t}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </div>
-        </div>
-
-                  {/* right placeholder */}
-                  <div className={left ? "md:col-start-2 md:opacity-0 md:pointer-events-none" : ""} />
+                          <span className="min-w-0 flex-1">
+                            <span className="block text-lg font-medium text-text">{entry.title}</span>
+                            <span className="block text-base leading-relaxed text-muted md:text-lg">
+                              {entry.subtitle}
+                            </span>
+                            {entry.summary && (
+                              <span className="mt-2 line-clamp-2 block text-sm leading-relaxed text-muted md:text-base">
+                                {entry.summary}
+                              </span>
+                            )}
+                            <span className="mt-3 flex flex-wrap gap-2 font-mono text-xs text-muted">
+                              {entry.location && (
+                                <span className="rounded-full border border-border bg-bg px-3 py-1">
+                                  {entry.location}
+                                </span>
+                              )}
+                              <span data-date className="rounded-full border border-border bg-bg px-3 py-1">
+                                {entry.date}
+                              </span>
+                            </span>
+                          </span>
+                        </span>
+                        {entry.tech && (
+                          <span className="mt-5 flex flex-wrap gap-2">
+                            {entry.tech.map((tech) => (
+                              <Chip key={tech} as="span">{tech}</Chip>
+                            ))}
+                          </span>
+                        )}
+                        {entry.bullets?.length ? (
+                          <span className={`grid transition-[grid-template-rows] duration-500 ${expanded[entry.id] ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
+                            <span className="overflow-hidden">
+                              <span className="mt-5 block space-y-2 text-base leading-relaxed text-muted md:text-lg">
+                                {entry.bullets.map((bullet) => (
+                                  <span key={bullet} className="flex gap-3">
+                                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                                    <span>{bullet}</span>
+                                  </span>
+                                ))}
+                              </span>
+                            </span>
+                          </span>
+                        ) : null}
+                      </button>
+                    </Card>
+                  </div>
                 </div>
               );
             })}

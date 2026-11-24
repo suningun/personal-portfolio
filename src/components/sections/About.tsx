@@ -1,67 +1,47 @@
-import Section from "@/components/ui/Section";
-import { portfolio } from "@/data/portfolio";
+import { Code2, GraduationCap, Sparkles } from "lucide-react";
+import Card from "@/components/ui/Card";
+import Reveal from "@/components/ui/Reveal";
+import SectionHeader from "@/components/ui/SectionHeader";
 import AboutTerminal from "./AboutTerminal";
+
+const interests = [
+  { title: "Building web apps", icon: Code2, tone: "text-primary bg-primary/10" },
+  { title: "AI for good", icon: Sparkles, tone: "text-green bg-green/10" },
+  {
+    title: "Teaching code",
+    icon: GraduationCap,
+    tone: "text-lavender bg-lavender/10",
+  },
+];
 
 export default function About() {
   return (
-    <section id="about">
-      <Section title="About Me" eyebrow="~/about">
-        <div className="space-y-10">
-          <AboutTerminal />
-          <div className="grid gap-6 sm:grid-cols-2">
-          
-          {/* TEXT */}
-          <div className="space-y-4 grid gap-4">
-            <div className="max-w-3xl space-y-4">
-            <p className="text-base md:text-lg text-text font-medium leading-relaxed">
-              I&apos;m {portfolio.personal.name}, a Software Development student.
-            </p>
+    <section id="about" className="scroll-mt-20">
+      <div className="mx-auto max-w-6xl px-6 py-24 md:py-28">
+        <Reveal>
+          <Card className="p-6 md:p-12">
+            <SectionHeader command="cat about.md" title="About me" />
+            <AboutTerminal />
 
-            <p className="text-base md:text-lg text-muted leading-relaxed">
-              I enjoy developing web applications and learning how software is designed from frontend interfaces to backend systems. Through coursework and personal projects, I&apos;ve been building my technical skills while gaining hands-on experience with modern development tools.
+            <p className="mb-5 mt-10 font-mono text-lg text-muted">
+              things I&apos;m into
             </p>
-
-            <p className="text-base md:text-lg text-muted leading-relaxed">
-              Currently based in {portfolio.personal.location}, I&apos;m seeking a Full Stack Developer or Software Developer internship where I can apply what I&apos;ve learned, gain real-world experience, and continue growing as a developer alongside an experienced team.
-            </p>
+            <div className="grid gap-4 md:grid-cols-3">
+              {interests.map(({ title, icon: Icon, tone }) => (
+                <Card
+                  key={title}
+                  className="flex items-center gap-5 p-5 md:p-6"
+                >
+                  <span className={`grid h-16 w-16 shrink-0 place-items-center rounded-2xl ${tone}`}>
+                    <Icon className="h-8 w-8" />
+                  </span>
+                  <h3 className="text-xl font-medium text-text">{title}</h3>
+                </Card>
+              ))}
             </div>
-          </div>
-
-          {/* EXISTING mindset / value / focus / goal cards */}
-          <div className="grid gap-4 sm:grid-cols-2">
-            <AboutCard
-              title="Interests"
-              text="Full Stack Development and building useful web applications."
-            />
-            <AboutCard
-              title="Approach"
-              text="Learning through projects and writing clean, maintainable code."
-            />
-            <AboutCard
-              title="Strengths"
-              text="Problem-solving, adaptability, and attention to detail."
-            />
-            <AboutCard
-              title="Goal"
-              text="Gain industry experience and grow as a software developer."
-            />
-          </div>
-
-          
-        </div>
-        </div>
-      </Section>
+          </Card>
+        </Reveal>
+      </div>
     </section>
-  );
-}
-
-function AboutCard({ title, text }: { title: string; text: string }) {
-  return (
-    <div
-      className="rounded-xl p-5 bg-surface border border-border transition-all duration-300 ease-out"
-    >
-      <p className="text-text font-semibold">{title}</p>
-      <p className="mt-2 text-base md:text-lg text-muted leading-relaxed">{text}</p>
-    </div>
   );
 }

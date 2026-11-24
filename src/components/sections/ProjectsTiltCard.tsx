@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Card from "@/components/ui/Card";
 
 export default function ProjectsTiltCard({
   children,
@@ -30,13 +31,13 @@ export default function ProjectsTiltCard({
   };
 
   return (
-    <div
+    <Card
       ref={cardRef}
       onPointerMove={tilt}
       onPointerLeave={reset}
-      className="overflow-hidden rounded-xl bg-surface border border-border hover:border-primary transition-colors duration-300"
+      className="overflow-hidden p-0 md:p-0"
     >
       {children}
-    </div>
+    </Card>
   );
 }

@@ -1,26 +1,22 @@
 import Reveal from "@/components/ui/Reveal";
+import SectionHeader from "@/components/ui/SectionHeader";
 
 export default function Section({
   title,
-  eyebrow,
+  command,
   children,
 }: {
   title: string;
-  eyebrow: string;
+  command: string;
   children: React.ReactNode;
 }) {
   return (
-    <section className="py-16 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto">
+    <div className="mx-auto max-w-6xl px-6 py-24 md:py-28">
       <Reveal>
-        <div className="mb-12 text-center">
-          <p className="font-mono text-sm text-green">{eyebrow}</p>
-          <h2 className="font-sans text-3xl md:text-4xl font-semibold tracking-tight text-text">
-            {title}
-          </h2>
-        </div>
+        <SectionHeader command={command} title={title} />
         {children}
       </Reveal>
-    </section>
+    </div>
   );
 }
 

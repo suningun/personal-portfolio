@@ -1,8 +1,5 @@
 // src/data/portfolio.ts
 
-import type { iconMap } from "@/lib/icon";
-
-
 export type SocialLinks = {
   github?: string;
   linkedin?: string;
@@ -17,6 +14,7 @@ export type Experience = {
   location?: string;
   start: string;
   end: string;
+  summary: string;
   bullets: string[];
   description: string[];
   tech?: string[];
@@ -27,6 +25,7 @@ export type Education = {
   degree: string;
   start: string;
   end: string;
+  summary: string;
   location: string;
   details?: string[];
 };
@@ -42,11 +41,31 @@ export type Project = {
   github?: string;
   img: string;
 };
-export type SkillLevel = "Comfortable" | "Familiar" | "Learning";
+export type Skill = {
+  name: string;
+  snippet: string;
+};
+
+export type SkillCategory = {
+  title: string;
+  items: Skill[];
+};
+
+export type AccentColor = "primary" | "lavender" | "green" | "blush";
+
 export type Language = {
   name: string;
   level: string;
   proficiency: number;
+  color: AccentColor;
+};
+
+export type AdditionalInfoItem = {
+  result: string;
+  title: string;
+  detail: string;
+  date: string;
+  color: AccentColor;
 };
 
 export type Reference = {
@@ -72,22 +91,18 @@ export type PortfolioData = {
     heroStack: string[];
   };
 
-  skills: {
-    categories: {
-      title: string;
-      icon: keyof typeof iconMap;
-      items: {
-        label: string;
-        level: SkillLevel;
-      }[];
-    }[];
-  };
+  skills: SkillCategory[];
 
   experience: Experience[];
   education: Education[];
   languages?: Language[];
   projects: Project[];
   achievements: string[];
+
+  additionalInfo: {
+    achievements: AdditionalInfoItem[];
+    volunteering: AdditionalInfoItem[];
+  };
 
   extras?: {
     certifications?: string[];
@@ -116,47 +131,49 @@ export const portfolio: PortfolioData = {
     heroStack: ["React", "Next.js", "Tailwind", "NestJS", "SQL", "Git"],
   },
 
-  skills: {
-    categories: [
-      {
-        title: "Languages",
-        icon: "Code2",
-        items: [
-          { label: "Python & JAVA", level: "Comfortable" },
-          { label: "HTML & CSS", level: "Comfortable" },
-          { label: "JavaScript", level: "Comfortable" },
-          { label: "C++", level: "Learning" },
-        ],
-      },
-      {
-        title: "Frameworks",
-        icon: "Server",
-        items: [
-          { label: "Bootstrap", level: "Familiar" },
-          { label: "Tailwind CSS", level: "Familiar" },
-          { label: "React", level: "Learning" },
-          { label: "Django", level: "Learning" },
-        ],
-      },
-      {
-        title: "Databases",
-        icon: "Database",
-        items: [
-          { label: "SQLite", level: "Comfortable" },
-        ],
-      },
-      {
-        title: "Tools",
-        icon: "Wrench",
-        items: [
-          { label: "Git", level: "Comfortable" },
-          { label: "Vercel", level: "Familiar" },
-          { label: "Framer", level: "Comfortable" },
-          { label: "Figma", level: "Comfortable" },
-        ],
-      },
-    ],
-  },
+  skills: [
+    {
+      title: "Languages",
+      items: [
+        { name: "HTML", snippet: "<h1>Hello, I'm Suning</h1>" },
+        { name: "CSS", snippet: ".card { border-radius: 16px; }" },
+        { name: "JavaScript", snippet: "const stack = [...frontend, ...backend];" },
+        { name: "TypeScript", snippet: "type Dev = { name: string; stack: string[] };" },
+        { name: "Python", snippet: "print(model.predict(image))" },
+        { name: "Java", snippet: 'System.out.println("Hello, AUPP");' },
+        { name: "SQL", snippet: "SELECT name FROM projects WHERE live = 1;" },
+      ],
+    },
+    {
+      title: "Frameworks",
+      items: [
+        { name: "React", snippet: '<SkillCard skill="React" />' },
+        { name: "Next.js", snippet: "export default function Page() { ... }" },
+        { name: "Tailwind CSS", snippet: 'className="rounded-full bg-primary"' },
+      ],
+    },
+    {
+      title: "Design",
+      items: [
+        { name: "Figma", snippet: "frame → auto layout → prototype" },
+        { name: "Framer", snippet: "publish → dermis-ai.framer.app" },
+      ],
+    },
+    {
+      title: "AI and ML",
+      items: [
+        { name: "Teachable Machine", snippet: "upload images → train → export model" },
+      ],
+    },
+    {
+      title: "Tools",
+      items: [
+        { name: "Git", snippet: 'git commit -m "feat: skills section"' },
+        { name: "GitHub", snippet: "git push origin main" },
+        { name: "Vercel", snippet: "vercel --prod   ✓ deployed" },
+      ],
+    },
+  ],
 
 
 
@@ -167,6 +184,7 @@ export const portfolio: PortfolioData = {
       location: "Hybrid",
       start: "2025",
       end: "Present",
+      summary: "Teaching students in Phnom Penh and Takeo to code with Scratch, HTML and CSS, plus online safety and AI basics.",
       description:["Teaching students at Phnom Penh / Takeo Province"],
       bullets: [
         "Establish Sisters of Code Club",
@@ -183,6 +201,7 @@ export const portfolio: PortfolioData = {
       location: "Phnom Penh",
       start: "July 2026",
       end: "Present",
+      summary: "Building full-stack apps and an MVP for real industry problems in fast one-week sprints.",
       description:["Full Stack Development & Entrepreneurship"],
       bullets: [
           "Selected for fully-funded 7-month Techpreneur Bootcamp 2.0, one of 60 chosen from 1,100+ applicants",
@@ -202,6 +221,7 @@ export const portfolio: PortfolioData = {
       degree: "Bachelor of Science in Software Development",
       start: "2025",
       end: "2028",
+      summary: "Studying software development on a full 4-year AMT scholarship.",
       location:"Cambodia",
       details: [
         "Full 4-year AMT Scholarship recipient, covering the complete Bachelor's degree program",
@@ -214,16 +234,19 @@ export const portfolio: PortfolioData = {
       name: "Khmer",
       level: "Native",
       proficiency: 100,
+      color: "primary",
     },
     {
       name: "English",
       level: "Fluent",
-      proficiency: 85,
+      proficiency: 80,
+      color: "lavender",
     },
     {
       name: "Chinese",
       level: "Intermediate",
-      proficiency: 60,
+      proficiency: 55,
+      color: "green",
     },
   ],
 
@@ -254,6 +277,83 @@ export const portfolio: PortfolioData = {
     "2023 - 2024 — Achieved a Grade A in Science on the Bac II National Examination (MOEYS), scoring 99.618.",
     "2026 — Selected as one of 60 participants out of over 1,100 applicants for the Techpreneur Bootcamp 2.0.",
   ],
+
+  additionalInfo: {
+    achievements: [
+      {
+        result: "3rd place",
+        title: "Techo Sen Award",
+        detail: "AI For Education, 11 teams",
+        date: "Dec 2025",
+        color: "primary",
+      },
+      {
+        result: "Top 60",
+        title: "Techpreneur Bootcamp 2.0",
+        detail: "From 1,100+ applicants",
+        date: "2026",
+        color: "lavender",
+      },
+      {
+        result: "Selected",
+        title: "Cambodia ICT Camp 2026",
+        detail: "From 352 applicants",
+        date: "Sep 2026",
+        color: "green",
+      },
+      {
+        result: "Scholarship",
+        title: "Immerse Education",
+        detail: "Outstanding essay",
+        date: "Mar 2025",
+        color: "blush",
+      },
+      {
+        result: "Grade A",
+        title: "Bac II National Exam",
+        detail: "Science",
+        date: "2024",
+        color: "lavender",
+      },
+      {
+        result: "4th place",
+        title: "Startup Cambodia Writing",
+        detail: "15 finalists",
+        date: "Dec 2023",
+        color: "primary",
+      },
+    ],
+    volunteering: [
+      {
+        result: "HR Core Team",
+        title: "Cambodia Tech Summit",
+        detail: "Recruiting and training volunteers",
+        date: "2025 — now",
+        color: "green",
+      },
+      {
+        result: "Leader",
+        title: "KimiTABI Program",
+        detail: "Exchange with Japanese students",
+        date: "Aug 2025",
+        color: "green",
+      },
+      {
+        result: "Speakers",
+        title: "RYL Season 8",
+        detail: "Rewrite Your Story, CKCC",
+        date: "Nov 2023",
+        color: "green",
+      },
+      {
+        result: "Team Lead",
+        title: "Red Cross Youth",
+        detail: "Chamrouen Phal High School",
+        date: "2022 — 24",
+        color: "green",
+      },
+    ],
+  },
 
   extras: {
     volunteering: [

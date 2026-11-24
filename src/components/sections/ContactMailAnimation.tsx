@@ -1,22 +1,17 @@
 "use client";
 
-import { Mail } from "lucide-react";
-
 export default function ContactMailAnimation({ active }: { active: boolean }) {
   return (
-    <div
-      className={`relative h-8 transition-opacity duration-200 ${
-        active ? "opacity-100" : "opacity-0"
-      }`}
-      aria-hidden={!active}
-    >
-      <div className="absolute left-3 right-8 top-1/2 border-t border-dashed border-primary/60" />
+    <div className="relative h-16 w-full lg:flex-1">
+      <div className="absolute left-0 right-20 top-1/2 border-t-2 border-dashed border-border" />
       <span
-        className="absolute top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-primary transition-[left] duration-[900ms] ease-in-out motion-reduce:transition-none"
-        style={{ left: active ? "calc(100% - 2rem)" : "0.75rem" }}
+        className={`absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-primary transition-[left,opacity] duration-[900ms] ease-in-out motion-reduce:transition-none ${
+          active ? "opacity-100" : "opacity-0"
+        }`}
+        style={{ left: active ? "calc(100% - 5.5rem)" : "0.25rem" }}
       />
-      <span className="absolute right-0 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full border border-primary text-primary">
-        <Mail className="h-4 w-4" />
+      <span className="absolute right-0 top-1/2 grid h-20 w-28 -translate-y-1/2 place-items-center rounded-2xl border-2 border-lavender text-xl text-text">
+        API
       </span>
     </div>
   );

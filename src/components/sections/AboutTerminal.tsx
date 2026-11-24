@@ -1,76 +1,42 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { portfolio } from "@/data/portfolio";
+import Card from "@/components/ui/Card";
 
-const getLines = () => [
-  `name: ${portfolio.personal.fullName}`,
-  `role: ${portfolio.personal.role}`,
-  `based in: ${portfolio.personal.location}`,
-  `focus: ${portfolio.personal.summary}`,
-];
+const intro =
+  "I’m a Software Development student in Phnom Penh who loves turning ideas into apps people actually use. Right now I’m learning full-stack development and looking for my first internship.";
+const splitAt = intro.indexOf(" Right now");
 
 export default function AboutTerminal() {
   const terminalRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
-  const [started, setStarted] = useState(false);
-  const [commandText, setCommandText] = useState("");
-  const [output, setOutput] = useState("");
-  const [commandDone, setCommandDone] = useState(false);
   const timerRef = useRef<number | undefined>(undefined);
+  const [text, setText] = useState("");
 
   useEffect(() => {
     const element = terminalRef.current;
     if (!element) return;
 
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    const lines = getLines();
-    const finalOutput = lines.join("\n");
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting || startedRef.current) return;
         startedRef.current = true;
-        setStarted(true);
+        observer.disconnect();
 
-        if (reducedMotion) {
-          setCommandText("❯ cat about.md");
-          setCommandDone(true);
-          setOutput(finalOutput);
-          observer.disconnect();
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          setText(intro);
           return;
         }
 
         let index = 0;
-        let line = 0;
-        const command = "❯ cat about.md";
         timerRef.current = window.setInterval(() => {
-          if (index < command.length) {
-            index += 1;
-            setCommandText(command.slice(0, index));
-            if (index === command.length) {
-              setCommandDone(true);
-              index = 0;
-            }
-            return;
-          }
-
-          const current = lines[line];
           index += 1;
-          setOutput(lines.slice(0, line).join("\n") + (line > 0 ? "\n" : "") + current.slice(0, index));
-
-          if (index >= current.length) {
-            line += 1;
-            index = 0;
-            if (line >= lines.length && timerRef.current !== undefined) {
-              window.clearInterval(timerRef.current);
-              timerRef.current = undefined;
-            }
+          setText(intro.slice(0, index));
+          if (index >= intro.length && timerRef.current !== undefined) {
+            window.clearInterval(timerRef.current);
+            timerRef.current = undefined;
           }
         }, 30);
-
-        observer.disconnect();
       },
       { threshold: 0.15 },
     );
@@ -84,39 +50,24 @@ export default function AboutTerminal() {
     };
   }, []);
 
-  const lines = getLines();
-  const outputLines = output.split("\n");
+  const firstPart = text.slice(0, splitAt);
+  const secondPart = text.slice(splitAt);
 
   return (
-    <div
-      ref={terminalRef}
-      className="rounded-xl border border-border bg-surface overflow-hidden font-mono text-sm"
-    >
-      <div className="flex items-center gap-2 border-b border-border px-4 py-3">
-        <span className="h-2.5 w-2.5 rounded-full bg-primary" />
-        <span className="h-2.5 w-2.5 rounded-full bg-blush" />
-        <span className="h-2.5 w-2.5 rounded-full bg-green" />
-        <span className="ml-2 text-muted">about.md</span>
+    <Card ref={terminalRef} className="overflow-hidden p-0">
+      <div className="flex items-center gap-3 border-b border-border px-5 py-4">
+        <span className="h-4 w-4 rounded-full bg-primary" />
+        <span className="h-4 w-4 rounded-full bg-blush" />
+        <span className="h-4 w-4 rounded-full bg-green" />
+        <span className="ml-3 font-mono text-lg text-muted">about.md</span>
       </div>
-      <div className="min-h-40 p-5 text-muted">
-        <p className="text-green">
-          {commandText}
-          {!commandDone && started && <span className="animate-pulse">▮</span>}
-        </p>
-        <div className="mt-2 whitespace-pre-wrap">
-          {outputLines.map((line, index) => (
-            <p
-              key={`${line}-${index}`}
-              className={index === lines.length - 1 ? "text-primary" : "text-text"}
-            >
-              {line}
-            </p>
-          ))}
-          {commandDone && (
-            <span className="text-primary animate-pulse">▮</span>
-          )}
-        </div>
-      </div>
-    </div>
+      <p className="p-7 text-xl font-medium leading-relaxed text-text md:p-9 md:text-2xl">
+        {firstPart}
+        <span className="text-muted">{secondPart}</span>
+        {text.length < intro.length && (
+          <span className="ml-1 inline-block h-6 w-1.5 animate-pulse bg-primary align-middle" />
+        )}
+      </p>
+    </Card>
   );
 }
