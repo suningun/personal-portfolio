@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Github, Linkedin, Menu, X } from "lucide-react";
 import ThemeToggle from "@/components/layout/ThemeToggle";
 
@@ -67,10 +68,16 @@ export default function Navbar() {
 
           {/* Left */}
           <div className="flex items-center">
-            <Link href="/" className="font-semibold text-xl tracking-wide">
-
-              <span className="text-primary">SUNING UN</span>
-            
+            <Link href="/" className="flex items-center gap-2 font-mono">
+              <Image
+                src="/images/avatar.svg"
+                alt=""
+                width={32}
+                height={32}
+                className="rounded-full"
+                style={{ imageRendering: "pixelated" }}
+              />
+              <span className="text-sm text-text"><span className="text-green">❯</span> suning</span>
             </Link>
           </div>
 

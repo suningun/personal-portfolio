@@ -115,7 +115,7 @@ export const portfolio: PortfolioData = {
       linkedin: "https://www.linkedin.com/in/suning-un-85a439344/"
     },
     phone: "+855 70 833 235",
-    img: "/images/ing.webp",
+    img: "/images/avatar.svg",
     heroStack: ["React", "Next.js", "Tailwind", "NestJS", "SQL", "Git"],
   },
 

@@ -21,9 +21,6 @@ export const metadata: Metadata = {
   title: "Suning Un — Software Developer",
   description:
     "Software Development student at AUPP, building web apps with Next.js, React, and Tailwind CSS, and open to internships.",
-  icons: {
-    icon: "/images/favicon.ico",
-  },
   formatDetection: {
     telephone: false,
     date: false,

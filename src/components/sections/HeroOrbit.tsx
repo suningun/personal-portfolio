@@ -342,14 +342,15 @@ export default function HeroOrbit() {
       />
 
       <div className="absolute left-1/2 top-1/2 z-[8] h-[53%] w-[53%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/30" />
-      <div className="absolute left-1/2 top-1/2 z-10 h-1/2 w-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full border-2 border-border">
+      <div className="absolute left-1/2 top-1/2 z-10 h-1/2 w-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full border-2 border-border bg-[#C5A7F2]">
         <Image
-          src={portfolio.personal.img}
+          src="/images/avatar.svg"
           alt={portfolio.personal.fullName}
           fill
           priority
           sizes="(max-width: 768px) 50vw, 230px"
           className="object-cover"
+          style={{ imageRendering: "pixelated" }}
         />
       </div>
 

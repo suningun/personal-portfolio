@@ -13,6 +13,30 @@ import Card from "@/components/ui/Card";
 import Chip from "@/components/ui/Chip";
 
 const IDLE_TEXT = "hover a skill to see it in action";
+const TOKEN_PATTERN =
+  /("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|\b(?:const|let|return|export|function|type|SELECT|FROM|WHERE|def|print|git)\b|\b\d+(?:\.\d+)?\b)/gi;
+
+function SyntaxHighlightedText({ text }: { text: string }) {
+  const parts = text.split(TOKEN_PATTERN);
+
+  return (
+    <>
+      {parts.map((part, index) => {
+        if (!part) return null;
+        if (/^["'`]/.test(part)) {
+          return <span key={index} className="text-green">{part}</span>;
+        }
+        if (/^\d+(?:\.\d+)?$/.test(part)) {
+          return <span key={index} className="text-primary">{part}</span>;
+        }
+        if (/^(const|let|return|export|function|type|SELECT|FROM|WHERE|def|print|git)$/i.test(part)) {
+          return <span key={index} className="text-lavender">{part}</span>;
+        }
+        return <span key={index} className="text-text">{part}</span>;
+      })}
+    </>
+  );
+}
 
 function getSkillKey(category: SkillCategory, skill: Skill) {
   return `${category.title}:${skill.name}`;
@@ -207,9 +231,13 @@ export default function SkillsInteractive() {
         <span className="shrink-0 text-green">❯</span>
         <span
           aria-live="polite"
-          className={`min-w-0 truncate ${activeKey ? "text-text" : "text-muted"}`}
+          className="min-w-0 truncate font-mono text-sm text-text"
         >
-          {terminalText}
+          {activeKey ? (
+            <SyntaxHighlightedText text={terminalText} />
+          ) : (
+            terminalText
+          )}
         </span>
         <span
           className={`h-3.5 w-[7px] shrink-0 bg-primary ${
@@ -217,7 +245,7 @@ export default function SkillsInteractive() {
           }`}
           aria-hidden="true"
         />
-        <span className="ml-auto hidden shrink-0 text-xs lowercase text-muted sm:inline">
+        <span className="ml-auto hidden shrink-0 font-mono text-xs lowercase text-muted sm:inline">
           {activeKey
             ? activeKey.replace(":", " · ")
             : "skills · portfolio"}
