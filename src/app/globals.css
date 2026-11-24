@@ -1,137 +1,75 @@
 @import "tailwindcss";
 
-:root {
-  --card-bg: color-mix(in srgb, var(--surface) 85%, #cbcfd4 );
-  --card-border: color-mix(in srgb, var(--border) 70%, transparent);
-
-  --bar-bg: color-mix(in srgb, var(--border) 50%, transparent);
-  --bar-left: var(--grad-left);
-  --bar-right: var(--grad-right);
-}
-
-
-/* =========================
-   Light theme (default)
-   ========================= */
-:root {
-  /* Page */
-  --bg: #f8fafc;
-  --surface: #ffffff;
-  --border: #e2e8f0;
-
-  /* Text */
-  --text: #0f172a;
-  --muted: #334155;
-
-  /* Brand */
-  --primary: #6565a1;
-  --primary-hover: #54548f;
-
-  /* Gradient helpers (button) */
-  --grad-left: color-mix(in srgb, var(--primary) 60%, #2563eb 40%);  /* blue-ish */
-  --grad-right: color-mix(in srgb, var(--primary) 60%, #a855f7 40%); /* purple-ish */
-
-  /* UI */
-  --chip: #f1f5f9;
-  
-}
-
-/* =========================
-   Dark theme
-   ========================= */
+:root,
 [data-theme="dark"] {
-  /* Page */
-  --bg: #0b1220;
-  --surface: #0f172a;
-  --border: rgba(255, 255, 255, 0.12);
-
-  /* Text */
-  --text: #e2e8f0;
-  --muted: #94a3b8;
-
-  /* Brand (brighter for dark) */
-  --primary: #8b8be0;
-  --primary-hover: #7a7ad6;
-
-  /* Gradient helpers (button) */
-  --grad-left: color-mix(in srgb, var(--primary) 55%, #2563eb 45%);
-  --grad-right: color-mix(in srgb, var(--primary) 55%, #a855f7 45%);
-
-  /* UI */
-  --chip: rgba(255, 255, 255, 0.06);
+  --bg: #181018;
+  --surface: #221822;
+  --border: #3D353C;
+  --text: #F7F0F7;
+  --muted: #A19AA1;
+  --primary: #EE81C3;
+  --on-primary: #181018;
+  --blush: #F4B9D8;
+  --lavender: #C5A7F2;
+  --green: #B3DB82;
+  color-scheme: dark;
 }
 
-/* =========================
-   Base
-   ========================= */
+[data-theme="light"] {
+  --bg: #FBF7FB;
+  --surface: #FFFFFF;
+  --border: #E5DCE5;
+  --text: #1F161F;
+  --muted: #6B636B;
+  --primary: #B8327F;
+  --on-primary: #FFFFFF;
+  --blush: #B8327F;
+  --lavender: #7446C2;
+  --green: #4A7420;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-blush: var(--blush);
+  --color-lavender: var(--lavender);
+  --color-green: var(--green);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
 html {
   scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 html,
 body {
   width: 100%;
   overflow-x: hidden;
-    background: var(--bg);
+}
+
+body {
+  background: var(--bg);
   color: var(--text);
-}
-
-.btn-gradient {
-  padding: 12px 22px;
-  border-radius: 999px;
-  font-weight: 600;
-  color: white;
-  border: 1px solid var(--border);
-
-  background-image: linear-gradient(90deg, var(--grad-left), var(--grad-right));
-  transition: transform 0.15s ease, filter 0.2s ease, box-shadow 0.2s ease;
-}
-
-.btn-gradient:hover {
-  filter: brightness(1.05);
-  box-shadow: 0 12px 30px color-mix(in srgb, var(--primary) 35%, transparent);
-}
-
-.btn-gradient:active {
-  transform: scale(0.98);
-}
-
-
-.text-gradient {
-  background-image: linear-gradient(90deg, var(--grad-left), var(--grad-right));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-
-.secondary-btn-gradient {
-  position: relative;
-  padding: 12px 22px;
-  border-radius: 999px;
-
-  font-weight: 600;
-  color: var(--text);
-
-  /* Gradient border trick */
-background:
-  linear-gradient(var(--bg), var(--bg)) padding-box,
-  linear-gradient(90deg, var(--grad-left), var(--grad-right)) border-box;
-
-
-  border: 1px solid var(--border);
-
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.2s ease,
-    filter 0.2s ease;
-}
-
-.secondary-btn-gradient:hover {
-  filter: brightness(1.05);
-  box-shadow: 0 12px 30px color-mix(in srgb, var(--primary) 35%, transparent);
-}
-
-.secondary-btn-gradient:active {
-  transform: scale(0.98);
 }

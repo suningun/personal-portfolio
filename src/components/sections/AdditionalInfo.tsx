@@ -50,8 +50,8 @@ export default function AdditionalInfo() {
 
   return (
     <div className="py-4 px-4 sm:px-6 max-w-6xl mx-auto">
-      <div className="rounded-xl p-6 bg-[var(--surface)] border border-[var(--border)]">
-        <h3 className="text-xl sm:text-2xl font-semibold mb-6 text-[var(--text)]">
+      <div className="rounded-xl p-6 bg-surface border border-border">
+        <h3 className="text-xl font-semibold mb-6 text-text">
           Additional Info
         </h3>
 
@@ -61,10 +61,10 @@ export default function AdditionalInfo() {
               section.show && (
                 <div key={section.title}>
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="h-8 w-8 rounded-lg grid place-items-center bg-gradient-to-br from-[var(--grad-left)] to-[var(--grad-right)] text-white flex-shrink-0">
+                    <div className="h-8 w-8 rounded-lg grid place-items-center bg-primary text-on-primary flex-shrink-0">
                       <section.icon className="h-4 w-4" />
                     </div>
-                    <h4 className="font-semibold text-[var(--text)] text-sm">
+                    <h4 className="font-semibold text-text text-sm">
                       {section.title}
                     </h4>
                   </div>
@@ -72,7 +72,7 @@ export default function AdditionalInfo() {
                     {section.items?.map((item, idx) => (
                       <li
                         key={idx}
-                        className="text-sm text-[var(--text)]/80 leading-relaxed"
+                        className="text-sm text-text/80 leading-relaxed"
                       >
                         • {item}
                       </li>

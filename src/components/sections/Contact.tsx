@@ -5,6 +5,7 @@ import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { Github, Linkedin } from "lucide-react";
 import Section from "@/components/ui/Section";
 import { portfolio } from "@/data/portfolio";
+import ContactMailAnimation from "./ContactMailAnimation";
 
 function InfoRow({
   icon,
@@ -19,34 +20,22 @@ function InfoRow({
 }) {
   return (
     <div
-      className="
-        flex items-center gap-4
-        rounded-2xl p-5
-        bg-[color-mix(in_srgb,var(--surface)_65%,transparent)]
-        border border-[var(--border)]
-        
-      ">
-      <div
-        className="
-          h-12 w-12 rounded-2xl grid place-items-center
-          bg-gradient-to-br from-[var(--grad-left)] to-[var(--grad-right)]
-          shadow-[0_12px_30px_color-mix(in_srgb,var(--primary)_25%,transparent)]
-          text-white
-        ">
+      className="flex items-center gap-4 rounded-xl p-5 bg-surface border border-border">
+      <div className="h-12 w-12 rounded-2xl grid place-items-center bg-primary text-on-primary">
         {icon}
       </div>
 
       <div className="min-w-0">
-        <p className="text-sm text-[var(--muted)]">{label}</p>
+        <p className="text-sm text-muted">{label}</p>
         {href ? (
           <a
             href={href}
-            className="text-[var(--text)] font-medium hover:text-[var(--primary)] transition break-all"
+            className="text-text font-medium hover:text-primary transition break-all"
           >
             {value}
           </a>
         ) : (
-          <p className="text-[var(--text)] font-medium break-words">{value}</p>
+          <p className="text-text font-medium break-words">{value}</p>
         )}
       </div>
     </div>
@@ -54,23 +43,19 @@ function InfoRow({
 }
 
 export default function ContactSection() {
-  // simple UI-only form (no backend)
   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [isOpening, setIsOpening] = useState(false);
+  const [showStatus, setShowStatus] = useState(false);
 
   return (
     <section id="contact">
-      <Section title="Keep in Touch">
+      <Section title="Keep in Touch" eyebrow="~/contact">
         <div className="grid gap-8 lg:grid-cols-2">
           {/* LEFT: Contact info */}
           <div
-            className="
-              rounded-3xl p-6 sm:p-8
-              bg-[color-mix(in_srgb,var(--surface)_55%,transparent)]
-              border border-[var(--border)]
-              backdrop-blur-md
-              shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+            className="rounded-xl p-6 sm:p-8 bg-surface border border-border">
 
-            <h3 className="text-2xl font-semibold text-[var(--text)]">
+            <h3 className="text-xl font-semibold text-text">
               Contact Information
             </h3>
 
@@ -104,7 +89,7 @@ export default function ContactSection() {
 
             {/* Socials */}
             <div className="mt-10">
-              <p className="text-lg font-semibold text-[var(--text)]">
+              <p className="text-xl font-semibold text-text">
                 Follow Me
               </p>
 
@@ -113,32 +98,20 @@ export default function ContactSection() {
                   href={portfolio.personal?.github ?? "#"}
                   target="_blank"
                   rel="noreferrer"
-                  className="
-                    h-14 w-14 rounded-2xl grid place-items-center
-                    bg-[color-mix(in_srgb,var(--surface)_65%,transparent)]
-                    border border-[var(--border)]
-                    hover:-translate-y-1 transition
-                    hover:shadow-[0_18px_45px_color-mix(in_srgb,var(--primary)_18%,transparent)]
-                  "
+                  className="h-14 w-14 rounded-xl grid place-items-center bg-surface border border-border hover:-translate-y-1 transition"
                   aria-label="GitHub"
                 >
-                  <Github className="h-6 w-6 text-[var(--text)]" />
+                  <Github className="h-6 w-6 text-text" />
                 </a>
 
                 <a
                   href={portfolio.personal.socials?.linkedin ?? "#"}
                   target="_blank"
                   rel="noreferrer"
-                  className="
-                    h-14 w-14 rounded-2xl grid place-items-center
-                    bg-[color-mix(in_srgb,var(--surface)_65%,transparent)]
-                    border border-[var(--border)]
-                    hover:-translate-y-1 transition
-                    hover:shadow-[0_18px_45px_color-mix(in_srgb,var(--primary)_18%,transparent)]
-                  "
+                  className="h-14 w-14 rounded-xl grid place-items-center bg-surface border border-border hover:-translate-y-1 transition"
                   aria-label="LinkedIn"
                 >
-                  <Linkedin className="h-6 w-6 text-[var(--text)]" />
+                  <Linkedin className="h-6 w-6 text-text" />
                 </a>
               </div>
             </div>
@@ -146,101 +119,102 @@ export default function ContactSection() {
 
           {/* RIGHT: Form */}
           <div
-            className="
-              rounded-3xl p-6 sm:p-8
-              bg-[color-mix(in_srgb,var(--surface)_55%,transparent)]
-              border border-[var(--border)]
-              backdrop-blur-md
-              shadow-[0_20px_60px_rgba(0,0,0,0.35)]
-            "
+            className="rounded-xl p-6 sm:p-8 bg-surface border border-border"
           >
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                // UI only (you can connect later)
-                alert("Message sent successfully.");
-                setForm({ name: "", email: "", message: "" });
+                if (isOpening) return;
+                const subject = `Portfolio contact from ${form.name}`;
+                const body = `${form.message}\n\nFrom: ${form.name}\nEmail: ${form.email}`;
+                const mailto = `mailto:${portfolio.personal.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                setIsOpening(true);
+                const reducedMotion = window.matchMedia(
+                  "(prefers-reduced-motion: reduce)",
+                ).matches;
+                window.setTimeout(
+                  () => {
+                    setShowStatus(true);
+                    window.location.href = mailto;
+                  },
+                  reducedMotion ? 0 : 900,
+                );
               }}
               className="space-y-6"
             >
               <div>
-                <label className="block text-sm font-medium text-[var(--text)] mb-2">
+                <label
+                  htmlFor="contact-name"
+                  className="block text-sm font-medium text-text mb-2"
+                >
                   Your Name
                 </label>
                 <input
+                  id="contact-name"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   placeholder="John Doe"
-                  className="
-                    w-full rounded-2xl px-4 py-3
-                    bg-[color-mix(in_srgb,var(--bg)_80%,transparent)]
-                    border border-[var(--border)]
-                    text-[var(--text)]
-                    placeholder:text-[var(--muted)]
-                    outline-none
-                    focus:ring-2 focus:ring-[color-mix(in_srgb,var(--primary)_35%,transparent)]
-                  "
+                  autoComplete="name"
+                  required
+                  className="w-full rounded-xl px-4 py-3 bg-bg border border-border text-text placeholder:text-muted outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[var(--text)] mb-2">
+                <label
+                  htmlFor="contact-email"
+                  className="block text-sm font-medium text-text mb-2"
+                >
                   Your Email
                 </label>
                 <input
+                  id="contact-email"
+                  type="email"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   placeholder="john@example.com"
-                  className="
-                    w-full rounded-2xl px-4 py-3
-                    bg-[color-mix(in_srgb,var(--bg)_80%,transparent)]
-                    border border-[var(--border)]
-                    text-[var(--text)]
-                    placeholder:text-[var(--muted)]
-                    outline-none
-                    focus:ring-2 focus:ring-[color-mix(in_srgb,var(--primary)_35%,transparent)]
-                  "
+                  autoComplete="email"
+                  required
+                  className="w-full rounded-xl px-4 py-3 bg-bg border border-border text-text placeholder:text-muted outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[var(--text)] mb-2">
+                <label
+                  htmlFor="contact-message"
+                  className="block text-sm font-medium text-text mb-2"
+                >
                   Your Message
                 </label>
                 <textarea
+                  id="contact-message"
                   value={form.message}
                   onChange={(e) =>
                     setForm({ ...form, message: e.target.value })
                   }
                   placeholder="Write your message..."
                   rows={7}
-                  className="
-                    w-full rounded-2xl px-4 py-3
-                    bg-[color-mix(in_srgb,var(--bg)_80%,transparent)]
-                    border border-[var(--border)]
-                    text-[var(--text)]
-                    placeholder:text-[var(--muted)]
-                    outline-none resize-none
-                    focus:ring-2 focus:ring-[color-mix(in_srgb,var(--primary)_35%,transparent)]
-                  "
+                  required
+                  className="w-full rounded-xl px-4 py-3 bg-bg border border-border text-text placeholder:text-muted outline-none resize-none focus:ring-2 focus:ring-primary"
                 />
               </div>
 
               <button
                 type="submit"
-                className="
-                  w-full h-14 rounded-2xl
-                  inline-flex items-center justify-center gap-3
-                  text-white font-semibold
-                  bg-gradient-to-r from-[var(--grad-left)] to-[var(--grad-right)]
-                  shadow-[0_20px_45px_color-mix(in_srgb,var(--primary)_22%,transparent)]
-                  hover:brightness-110 active:scale-[0.99]
-                  transition
-                "
+                className="w-full h-14 rounded-xl inline-flex items-center justify-center gap-3 text-on-primary font-semibold font-mono bg-primary hover:brightness-110 active:scale-[0.99] transition"
               >
                 <Send className="h-5 w-5" />
                 Send Message
               </button>
+              <ContactMailAnimation active={isOpening} />
+              {showStatus && (
+                <p className="font-mono text-sm text-green">
+                  ✓ Opening your email app…
+                </p>
+              )}
+              <p className="text-center text-sm text-muted">
+                This opens your email app with the message ready to send.
+              </p>
             </form>
           </div>
         </div>

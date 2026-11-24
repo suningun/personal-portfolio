@@ -5,7 +5,7 @@ export default function Skills() {
     return (
     
     <section id="skills">
-        <Section title="Skills">
+        <Section title="Skills" eyebrow="~/skills">
     <SkillsSection />
         </Section>
     </section>

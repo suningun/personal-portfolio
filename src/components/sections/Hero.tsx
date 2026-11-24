@@ -1,84 +1,58 @@
 import { portfolio } from "@/data/portfolio";
-import Image from "next/image";
+import Reveal from "@/components/ui/Reveal";
+import HeroOrbit from "./HeroOrbit";
 
 export default function Hero() {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center px-6"
+      className="py-20 md:py-28 flex items-center max-w-6xl mx-auto px-6 bg-bg relative z-0"
     >
-      <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-[auto_1fr] items-center gap-16">
-
-        {/* Image */}
-        <div className="flex justify-center md:justify-start rounded-xl p-5
-        bg-[color-mix(in_srgb,var(--surface)_70%,transparent)]
-        border border-[var(--border)]">
-          
-          <div className="w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden ring-2 ring-white/20">
-            <Image
-              src={portfolio.personal.img}
-              alt={portfolio.personal.name}
-              width={288}
-              height={288}
-              className="object-cover"
-              priority
-            />
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="text-center md:text-left space-y-6">
-          <h1 className="text-5xl font-bold text-gradient">
-            Hi!, I’m {portfolio.personal.name}.
+      <Reveal>
+        <div className="grid items-center gap-12 md:grid-cols-[1.1fr_1fr] w-full">
+        <div className="text-center md:text-left">
+          <p className="font-mono text-sm text-green mb-4">❯ whoami</p>
+          <h1 className="text-5xl md:text-6xl font-semibold tracking-tight text-text">
+            Hi, I&apos;m {portfolio.personal.name}.
           </h1>
-
-            <div className="text-center md:text-left space-y-6">
-                  
-                    <h1
-                      className="
-                      text-5xl font-bold text-gradient
-                    "
-                    >
-                      {portfolio.personal.role}
-                    </h1>
-            
-                </div>
-
-                {/* <div className="flex flex-wrap gap-2 mt-4">
-                  
-                    <span
-                      className="
-                      px-3 py-1
-                      rounded-full
-                      bg-[var(--surface)]
-                      border border-[var(--border)]
-                      text-sm text-[var(--text)]
-                      transition-all duration-200 ease-out
-                      hover:-translate-y-0.5
-                      hover:shadow-[0_0_0_3px_color-mix(in_srgb,var(--primary)_30%,transparent)]
-                    "
-                    >
-                      {portfolio.personal.role}
-                    </span>
-            
-                </div> */}
-
-          <p className="max-w-xl text-[var(--muted)]">
+          <p className="mt-4 text-4xl md:text-5xl font-semibold text-primary">
+            {portfolio.personal.role}
+          </p>
+          <p className="mt-6 text-base md:text-lg text-muted max-w-xl leading-relaxed mx-auto md:mx-0">
             {portfolio.personal.summary}
           </p>
+          <p className="mt-5 font-mono text-sm text-green">
+            ● Open to internships
+          </p>
 
-          <div className="flex justify-center md:justify-start gap-4 pt-4">
-            <a href="#projects" className="px-6 py-3 rounded-full btn-gradient text-white font-medium">
-              View Projects
+          <div className="mt-8 flex flex-wrap justify-center md:justify-start items-center gap-3">
+            <a
+              href="#projects"
+              className="font-mono rounded-full h-12 px-6 inline-flex items-center bg-primary text-on-primary"
+            >
+              View projects
             </a>
-            <a href="#contact" className="px-6 py-3 rounded-full secondary-btn-gradient font-medium">
+            <a
+              href="#contact"
+              className="font-mono rounded-full h-12 px-6 inline-flex items-center border border-border text-text hover:border-primary"
+            >
               Contact
+            </a>
+            <a
+              href="/cv.pdf"
+              download
+              className="font-mono text-lavender hover:text-primary px-2"
+            >
+              Download CV ↓
             </a>
           </div>
         </div>
 
+        <div className="order-first md:order-none">
+          <HeroOrbit />
+        </div>
       </div>
-      
+      </Reveal>
     </section>
   );
 }

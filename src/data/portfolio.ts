@@ -35,10 +35,14 @@ export type Project = {
   name: string;
   description: string;
   tech: string[];
+  role?: string;
+  highlights?: string[];
+  award?: string;
   link?: string;
   github?: string;
   img: string;
 };
+export type SkillLevel = "Comfortable" | "Familiar" | "Learning";
 export type Language = {
   name: string;
   level: string;
@@ -55,6 +59,7 @@ export type Reference = {
 
 export type PortfolioData = {
   personal: {
+    fullName: string;
     github: string;
     name: string;
     role: string;
@@ -64,6 +69,7 @@ export type PortfolioData = {
     socials: SocialLinks;
     phone: string;
     img: string;
+    heroStack: string[];
   };
 
   skills: {
@@ -72,7 +78,7 @@ export type PortfolioData = {
       icon: keyof typeof iconMap;
       items: {
         label: string;
-        value: number;
+        level: SkillLevel;
       }[];
     }[];
   };
@@ -90,8 +96,11 @@ export type PortfolioData = {
   };
 };
 
+export const SITE_URL = "https://suningun.vercel.app";
+
 export const portfolio: PortfolioData = {
   personal: {
+    fullName: "Suning Un",
     github: "https://github.com/suningun",
     name: "Suning",
     role: "Software Developer",
@@ -104,6 +113,7 @@ export const portfolio: PortfolioData = {
     },
     phone: "+855 70 833 235",
     img: "/images/ing.webp",
+    heroStack: ["React", "Next.js", "Tailwind", "NestJS", "SQL", "Git"],
   },
 
   skills: {
@@ -112,37 +122,37 @@ export const portfolio: PortfolioData = {
         title: "Languages",
         icon: "Code2",
         items: [
-          { label: "Python & JAVA", value: 75 },
-          { label: "HTML & CSS", value: 95 },
-          { label: "JavaScript", value: 90 },
-          { label: "C++", value: 10 },
+          { label: "Python & JAVA", level: "Comfortable" },
+          { label: "HTML & CSS", level: "Comfortable" },
+          { label: "JavaScript", level: "Comfortable" },
+          { label: "C++", level: "Learning" },
         ],
       },
       {
         title: "Frameworks",
         icon: "Server",
         items: [
-          { label: "Bootstrap", value: 60 },
-          { label: "Tailwind CSS", value: 55 },
-          { label: "React", value: 20 },
-          { label: "Django", value: 5 },
+          { label: "Bootstrap", level: "Familiar" },
+          { label: "Tailwind CSS", level: "Familiar" },
+          { label: "React", level: "Learning" },
+          { label: "Django", level: "Learning" },
         ],
       },
       {
         title: "Databases",
         icon: "Database",
         items: [
-          { label: "SQLite", value: 75 },
+          { label: "SQLite", level: "Comfortable" },
         ],
       },
       {
         title: "Tools",
         icon: "Wrench",
         items: [
-          { label: "Git", value: 75 },
-          { label: "Vercel", value: 55 },
-          { label: "Framer", value: 82 },
-          { label: "Figma", value: 90 },
+          { label: "Git", level: "Comfortable" },
+          { label: "Vercel", level: "Familiar" },
+          { label: "Framer", level: "Comfortable" },
+          { label: "Figma", level: "Comfortable" },
         ],
       },
     ],
@@ -222,6 +232,7 @@ export const portfolio: PortfolioData = {
       name: "Personal Portfolio",
       description: "My personal website built with Next.js and Tailwind.",
       tech: ["Next.js", "Tailwind"],
+      github: "https://github.com/suningun/personal-portfolio",
       link: "https://suningun.vercel.app/",
       img: "/images/portfolio-ing.png",
     },
@@ -229,6 +240,7 @@ export const portfolio: PortfolioData = {
       name: "Dermis AI Disease Detector",
       description: "AI built with Teachable Machine & Implemented using Framer.",
       tech: ["Teachable Machine", "Framer"],
+      award: "Techo Sen Award — 3rd of 11 teams, AI For Education Competition 2025",
       link: "https://vibrant-illuminate-985343.framer.app/",
       img: "/images/dermis.png",
     },

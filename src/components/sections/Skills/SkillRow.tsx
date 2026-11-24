@@ -1,18 +1,19 @@
+import type { SkillLevel } from "@/data/portfolio";
 import SkillBar from "./SkillBar";
 
 export default function SkillRow({
   skill,
+  highlighted,
 }: {
-  skill: { label: string; value: number };
+  skill: { label: string; level: SkillLevel };
+  highlighted: boolean;
 }) {
   return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between text-sm">
-        <p className="text-[var(--text)]/90">{skill.label}</p>
-        <p className="text-[var(--muted)]">{skill.value}%</p>
+    <div>
+      <div className="flex items-center justify-between gap-3 text-sm">
+        <p className="text-text/90">{skill.label}</p>
+        <SkillBar level={skill.level} highlighted={highlighted} />
       </div>
-
-      <SkillBar value={skill.value} />
     </div>
   );
 }
