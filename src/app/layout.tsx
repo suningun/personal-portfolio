@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
+import CustomCursor from "@/components/layout/CustomCursor";
 import DotGridBackground from "@/components/layout/DotGridBackground";
 import { portfolio, SITE_URL } from "@/data/portfolio";
 import "./globals.css";
@@ -105,6 +106,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <DotGridBackground />
+        <CustomCursor />
         <Navbar />
         <main className="pt-16 relative z-10">{children}</main>
         <Footer />

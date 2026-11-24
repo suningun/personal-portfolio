@@ -2,6 +2,7 @@ import { portfolio } from "@/data/portfolio";
 import Reveal from "@/components/ui/Reveal";
 import HeroOrbit from "./HeroOrbit";
 import Button from "@/components/ui/Button";
+import ScrambleText from "@/components/ui/ScrambleText";
 
 export default function Hero() {
   return (
@@ -16,10 +17,10 @@ export default function Hero() {
             <span className="text-green">❯</span> whoami
           </p>
           <h1 className="text-5xl md:text-6xl font-semibold tracking-tight text-text">
-            Hi, I&apos;m {portfolio.personal.name}.
+            Hi, I&apos;m <ScrambleText text={portfolio.personal.name} />.
           </h1>
           <p className="mt-4 text-4xl md:text-5xl font-semibold text-primary">
-            {portfolio.personal.role}
+            <ScrambleText text={portfolio.personal.role} delay={300} />
           </p>
           <p className="mt-6 text-base md:text-lg text-muted max-w-xl leading-relaxed mx-auto md:mx-0">
             {portfolio.personal.summary}
