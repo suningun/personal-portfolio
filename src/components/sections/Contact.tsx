@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, type FormEvent, type KeyboardEvent } from "react";
+import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
 import SectionHeader from "@/components/ui/SectionHeader";
 import Card from "@/components/ui/Card";
@@ -148,7 +149,7 @@ export default function ContactSection() {
 
               <div className="grid md:grid-cols-[220px_1fr]">
                   <aside className="flex flex-col items-center gap-3 border-b border-border p-6 text-center md:border-b-0 md:border-r">
-                    <img src="/images/avatar.svg" alt="Suning Un" width={96} height={96} className="rounded-full" style={{ imageRendering: "pixelated" }} />
+                    <Image src="/images/avatar.svg" alt="Profile photo" width={96} height={96} className="rounded-full" style={{ imageRendering: "pixelated" }} />
                     <p className="text-base font-medium text-text">Suning Un</p>
                     <p className="font-mono text-xs text-green">● open to work</p>
                     <div className="flex flex-col gap-1">
