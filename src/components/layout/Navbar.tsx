@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Github, Linkedin, Menu, X } from "lucide-react";
 import ThemeToggle from "@/components/layout/ThemeToggle";
+import ScrollProgress from "@/components/layout/ScrollProgress";
 
 type NavItem = { label: string; id: string };
 
@@ -24,6 +25,14 @@ export default function Navbar() {
 
   const [active, setActive] = useState<string>("home");
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const sections = navItems
@@ -60,8 +69,13 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50">
-      <div className="bg-bg/60 border-b border-border">
+    <header
+      className={[
+        "fixed top-0 left-0 w-full z-50 transition-colors duration-300",
+        scrolled ? "bg-bg/75 backdrop-blur-md" : "bg-transparent",
+      ].join(" ")}
+    >
+      <div className="border-border">
         {/* 3-column grid => center stays centered */}
           <div className="max-w-6xl mx-auto px-6 h-16 grid grid-cols-[1fr_auto] md:grid-cols-[1fr_auto_1fr] items-center">
 
@@ -90,15 +104,16 @@ export default function Navbar() {
                   key={item.id}
                   href={`#${item.id}`}
                   className={[
-                    "relative px-2 py-1 transition",
-                    "hover:text-text",
+                    "font-mono text-sm hover:text-text transition-colors",
                     isActive ? "text-text" : "text-muted",
                   ].join(" ")}
                 >
                   {isActive && (
-                    <span className="pointer-events-none absolute -inset-1 sm:-inset-1 rounded-full border border-primary/70" />
+                    <span className="text-green mr-1" aria-hidden="true">
+                      ❯
+                    </span>
                   )}
-                  <span className="relative">{item.label}</span>
+                  <span>{item.label}</span>
                 </a>
               );
             })}
@@ -172,6 +187,12 @@ export default function Navbar() {
           </div>
         )}
       </div>
+
+        <ScrollProgress
+          className={`transition-opacity duration-300 ${
+            scrolled ? "opacity-100" : "opacity-0"
+          }`}
+        />
     </header>
   );
 }

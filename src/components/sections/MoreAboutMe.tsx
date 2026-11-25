@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import Reveal from "@/components/ui/Reveal";
 import SectionHeader from "@/components/ui/SectionHeader";
+import CountUp from "@/components/ui/CountUp";
 import {
   portfolio,
   type AccentColor,
@@ -36,6 +38,21 @@ const accents: Record<
 };
 
 const FADE = 24;
+
+function countUpNumber(text: string) {
+  const match = text.match(/\d[\d,]*/);
+  if (!match) return <>{text}</>;
+  const index = match.index ?? 0;
+  const matched = match[0];
+  const value = Number(matched.replace(/,/g, ""));
+  return (
+    <>
+      {text.slice(0, index)}
+      <CountUp value={value} />
+      {text.slice(index + matched.length)}
+    </>
+  );
+}
 
 function maskFor(left: boolean, right: boolean) {
   const leftStops = left
@@ -287,10 +304,10 @@ function InfoStrip({
               <p
                 className={`whitespace-nowrap text-lg font-medium md:text-xl ${accents[item.color].text}`}
               >
-                {item.result}
+                {countUpNumber(item.result)}
               </p>
               <p className="mt-2 text-sm font-medium text-text">{item.title}</p>
-              <p className="text-xs text-muted">{item.detail}</p>
+              <p className="text-xs text-muted">{countUpNumber(item.detail)}</p>
               <p className="mt-2.5 font-mono text-xs text-muted">
                 {item.date}
               </p>
@@ -313,25 +330,27 @@ export default function MoreAboutMe() {
   return (
     <section id="more" className="scroll-mt-20">
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-28">
-        <SectionHeader command="cat more.md" title="More about me" />
+        <Reveal>
+          <SectionHeader command="cat more.md" title="More about me" />
 
-        {hasLanguages && <LanguagesGroup />}
+          {hasLanguages && <LanguagesGroup />}
 
-        {achievements.length > 0 && (
-          <InfoStrip
-            className="mt-14"
-            title="Achievements"
-            items={achievements}
-          />
-        )}
+          {achievements.length > 0 && (
+            <InfoStrip
+              className="mt-14"
+              title="Achievements"
+              items={achievements}
+            />
+          )}
 
-        {volunteering.length > 0 && (
-          <InfoStrip
-            className="mt-14"
-            title="Volunteering"
-            items={volunteering}
-          />
-        )}
+          {volunteering.length > 0 && (
+            <InfoStrip
+              className="mt-14"
+              title="Volunteering"
+              items={volunteering}
+            />
+          )}
+        </Reveal>
       </div>
     </section>
   );

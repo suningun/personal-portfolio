@@ -12,7 +12,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="border-t">
+    <footer className="border-t border-border">
       <div className="max-w-6xl mx-auto px-6 pt-14 pb-6 grid md:grid-cols-[1.5fr_1fr_1fr] gap-10">
         {/* Brand / summary */}
         <div className="flex flex-col gap-4">
@@ -70,7 +70,7 @@ export default function Footer() {
         </div>
       </div>
       {/* Bottom bar */}
-      <div className="border-t font-mono text-xs text-muted flex justify-between items-center max-w-6xl mx-auto px-6 py-4">
+      <div className="border-t border-border font-mono text-xs text-muted flex justify-between items-center max-w-6xl mx-auto px-6 py-4">
         <p>© {year} Suning Un · built with Next.js</p>
         <button
           onClick={scrollToTop}
