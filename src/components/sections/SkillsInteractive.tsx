@@ -152,13 +152,13 @@ export default function SkillsInteractive() {
       <div className="grid gap-3 md:grid-cols-3">
         {portfolio.skills.map((category, categoryIndex) => {
           const categoryDelay = categoryIndex * 110;
-          const isLanguages = category.title === "Languages";
+          const isFrontend = category.title === "Frontend";
 
           return (
             <Card
               key={category.title}
               className={`group relative overflow-hidden transition-[opacity,transform] duration-700 ${
-                isLanguages ? "md:col-span-2" : ""
+                isFrontend ? "md:col-span-2" : ""
               } ${
                 hydrated && !entered
                   ? "translate-y-4 opacity-0"
